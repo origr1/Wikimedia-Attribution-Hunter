@@ -1,6 +1,6 @@
-# Image Attribution Finder
+# Wikimedia Attribution Hunter
 
-This script helps automate the process of finding attribution information for images from the Wikimedia Commons and other sources by searching Google Images using URLs from a CSV file. The tool can either update missing attributions in an existing CSV file or generate a new CSV file with the fetched attributions.
+This script helps automate the process of finding attribution information for images from the Wikimedia Commons by searching Google Images using URLs from a CSV file. The tool can either update missing attributions in an existing CSV file or generate a new CSV file with the fetched attributions.
 
 ## Features
 - Process image URLs from a CSV file.
@@ -17,8 +17,8 @@ This script helps automate the process of finding attribution information for im
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-username/image-attribution-finder.git
-    cd image-attribution-finder
+    git clone git@github.com:origr1/Wikimedia-Attribution-Hunter.git
+    cd Wikimedia-Attribution-Hunter
     ```
 
 2. Install dependencies:
