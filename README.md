@@ -6,8 +6,12 @@ This script helps automate the process of finding attribution information for im
 - Process image URLs from a CSV file.
 - Automatically search Google Images for Wikimedia Commons links.
 - Extract and insert attribution details.
-- Supports both updating an existing CSV file and generating a new file with missing or updated attribution information.
-- Limits the number of records processed at once for large datasets.
+- Supports both updating an existing CSV file and generating a new file with fetched attributions.
+- Allows user-defined limits on the number of records processed at once for large datasets.
+- Supports custom label columns to replace the default HebrewName with any other relevant label (optional).
+- Ability to offset the start point of processing from the CSV file.
+- Options to either update the same file or save missing attributions to a new file.
+
 
 ## Installation
 
@@ -26,13 +30,13 @@ This script helps automate the process of finding attribution information for im
 
 The CSV file should contain the following fields:
 - `image_url`: The URL of the image that needs attribution.
-- `HebrewName` (optional): The Hebrew name associated with the image (can be replaced with any other relevant label).
+- `label` (optional): Any label associated with the image. The column name can be configured, e.g., AlternateName, etc.
 - `commons_url` (optional): The Wikimedia Commons URL, if already available.
 - `attribution` (optional): The attribution text, if available.
 
 ### Example:
 
-| image_url                          | HebrewName     | commons_url                                     | attribution                  |
+| image_url                          | label     | commons_url                                     | attribution                  |
 | ----------------------------------- | -------------- | ----------------------------------------------- | ---------------------------- |
 | https://example.com/image1.jpg      | Some Name      |                                                 |                              |
 | https://example.com/image2.jpg      | Another Name   | https://commons.wikimedia.org/wiki/File:Image2  | Attribution text             |
@@ -42,20 +46,45 @@ The CSV file should contain the following fields:
 Run the script with the following command:
 
 ```bash
-node app.js <input-file.csv> <--update|--newfile> [limit]
+node app.js --file <input-file.csv> [--update|--newfile] [--limit <number>] [--offset <number>] [--labelColumn <name>]
 ```
 
-To update missing attributions in the same file and limit to 20 top images:
+### Options:
+- `--file`: Specifies the input CSV file.
+- `--update`: Updates the existing CSV file by adding the missing attribution and Wikimedia Commons links.
+- `--newfile`: Creates a new CSV file with updated attributions.
+- `--limit <number>`: Limits the number of records processed (optional).
+- `--offset <number>`: Offsets the starting point of the record processing (optional).
+- `--labelColumn <name>`: Specifies the label column name in the CSV (defaults to label).
+
+### Examples:
+Update the existing CSV file, processing only 20 images starting from record 0:
 
 ```bash
-node app.js <input-file.csv> --update 20
+node app.js --file images.csv --update --limit 20
 ```
 
-To generate a new file with only the updated records limit to 10 top images:
+Create a new CSV file with updated attributions, but only for the first 10 images:
 
 ```bash
-node app.js <input-file.csv> --newfile 10
+node app.js --file images.csv --newfile --limit 10
 ```
+
+Process a specific range from an offset of 10, processing the next 30 images:
+
+```bash
+node app.js --file images.csv --update --limit 30 --offset 10
+```
+
+Change the label column to AlternateName instead of the default label:
+```bash
+node app.js --file images.csv --update --labelColumn AlternateName
+```
+
+## Notes:
+- When using the `--update` option, the script will preserve all existing records and only update the missing `attribution` or `commons_url` fields. It won't overwrite existing values.
+- If no limit is specified, the script processes all records from the CSV.
+- Both `--update` and `--newfile` options cannot be used simultaneously. If both are provided, the script will exit with an error.
 
 ## Contribution
 
