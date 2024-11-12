@@ -1,12 +1,13 @@
 # Wikimedia Attribution Hunter
 
-This script helps automate the process of finding attribution information for images from the Wikimedia Commons by searching Google Images using URLs from a CSV file. The tool can either update missing attributions in an existing CSV file or generate a new CSV file with the fetched attributions.
+This tool automates the process of searching Google Images for attribution information on Wikimedia Commons for image URLs provided in a CSV or XLSX file. It downloads images, attempts to find the corresponding Wikimedia Commons page, and validates attribution through image hash comparison.
 
 ## Features
-- Process image URLs from a CSV file.
+- Process image URLs from a CSV or XLSX file.
 - Automatically search Google Images for Wikimedia Commons links.
+- Download images, generate hashes, and compare with Wikimedia Commons images to validate accuracy.
 - Extract and insert attribution details.
-- Supports both updating an existing CSV file and generating a new file with fetched attributions.
+- Supports updating an existing file or generating a new file with updated attribution information.
 - Allows user-defined limits on the number of records processed at once for large datasets.
 - Supports custom label columns to replace the default HebrewName with any other relevant label (optional).
 - Ability to offset the start point of processing from the CSV file.
@@ -26,9 +27,9 @@ This script helps automate the process of finding attribution information for im
     npm install
     ```
 
-## CSV File Format
+## CSV or XLSX File Format
 
-The CSV file should contain the following fields:
+The input file should contain the following fields:
 - `image_url`: The URL of the image that needs attribution.
 - `label` (optional): Any label associated with the image. The column name can be configured, e.g., AlternateName, etc.
 - `commons_url` (optional): The Wikimedia Commons URL, if already available.
