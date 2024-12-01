@@ -14,7 +14,7 @@ async function processImages(options) {
 
     console.log(`Processing ${imageUrls.length} records...`);
 
-    const limitConcurrency = pLimit(5);
+    const limitConcurrency = pLimit(10);
 
     const results = await Promise.all(
         imageUrls.map((entry) =>
@@ -87,7 +87,8 @@ async function fetchAttribution({ image_url, label, commons_url, attribution }) 
     } catch (error) {
         console.error("Error during attribution fetching process:", error);
         return { image_url, label, commons_url: null, attribution: null };
-    } finally {
+    } 
+    finally {
         if (originalImagePath && fs.existsSync(originalImagePath)) fs.unlinkSync(originalImagePath);
     }
 }

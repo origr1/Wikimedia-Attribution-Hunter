@@ -1,4 +1,5 @@
 import imghash from 'imghash';
+import hamming from 'hamming';
 import { fileTypeFromFile } from 'file-type';
 import { fetchImageFromWikimedia } from './puppeteer-utils.js';
 import axios from 'axios';
@@ -20,7 +21,7 @@ export async function downloadImage(url, baseFilename = 'image') {
 export async function getImageHash(imagePath) {
     const fileType = await fileTypeFromFile(imagePath);
     if (!fileType || !fileType.mime.startsWith('image/')) return null;
-
+    console.log('Calculating hash for', imagePath);
     try {
         return await imghash.hash(imagePath);
     } catch {
@@ -32,10 +33,15 @@ export async function isExactMatch(originalImagePath, commonsUrl) {
     const commonsImagePath = await fetchImageFromWikimedia(commonsUrl, 'commons_image');
     if (!commonsImagePath) return false;
 
-    const originalHash = await getImageHash(originalImagePath);
-    const commonsHash = await getImageHash(commonsImagePath);
-
+    const originalHash = await getImageHash(originalImagePath, 16);
+    const commonsHash = await getImageHash(commonsImagePath, 16);
+    const distance = hamming(originalHash, commonsHash);
+    console.log('Hamming Distance:', distance);
     fs.unlinkSync(commonsImagePath);
+
+    if (distance <= 5) { 
+        return true;
+    } 
 
     return originalHash === commonsHash;
 }
