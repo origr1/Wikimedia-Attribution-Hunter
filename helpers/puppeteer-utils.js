@@ -11,15 +11,15 @@ export async function findCommonsUrlsOnGoogle(imageUrl) {
             'Accept-Language': 'en'
         });
         await page.goto('https://images.google.com/?hl=en');
+         
         await page.waitForSelector('div[aria-label="Search by image"]', { timeout: 20000 });
         console.log("Google Images page loaded.");
 
         // Click the 'Search by image' button
         await page.click('div[aria-label="Search by image"]');
         await page.waitForTimeout(3000);
-
         // Enter the image URL into the search field
-        const [urlInput] = await page.$x('/html/body/div[1]/div[3]/form/div[1]/div[1]/div[3]/c-wiz/div[2]/div/div[3]/div[2]/c-wiz/div[2]/input');
+        const [urlInput] = await page.$x('/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div[2]/c-wiz/div[2]/div/div[3]/div[2]/c-wiz/div[2]/input');
         if (urlInput) {
             await urlInput.type(imageUrl);
             await urlInput.press('Enter');
